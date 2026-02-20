@@ -1,0 +1,119 @@
+{
+  "app": {
+    "title": "EasyDaily"
+  },
+  "nav": {
+    "quickActions": "Ações",
+    "history": "Histórico",
+    "settings": "Configurações"
+  },
+  "quickActions": {
+    "title": "EasyDaily",
+    "addNote": "Adicionar Nota",
+    "addNoteDesc": "Registre o que está fazendo agora",
+    "aiSummary": "Resumo de Hoje",
+    "aiSummaryDesc": "Gere um resumo com IA",
+    "viewHistory": "Ver Histórico",
+    "viewHistoryDesc": "Navegue por dias anteriores",
+    "dailyGoal": "Meta do Dia",
+    "dailyGoalDesc": "Defina seu objetivo principal"
+  },
+  "history": {
+    "title": "Histórico",
+    "search": "Buscar notas...",
+    "empty": "Nenhuma nota encontrada",
+    "emptyDesc": "Comece adicionando sua primeira nota!",
+    "notesCount": "{{count}} nota",
+    "notesCount_plural": "{{count}} notas",
+    "exportDay": "Exportar Dia",
+    "addNote": "Adicionar Nota"
+  },
+  "settings": {
+    "title": "Configurações",
+    "cycle": "Ciclo de Notificação",
+    "cycleDesc": "Intervalo entre lembretes",
+    "cycleMinutes": "{{count}} minutos",
+    "ai": "Inteligência Artificial",
+    "aiProvider": "Provedor de IA",
+    "aiApiKey": "Chave da API",
+    "aiApiKeyPlaceholder": "Cole sua chave aqui...",
+    "tags": "Tags",
+    "tagsDesc": "Gerencie suas categorias",
+    "newTag": "Nova Tag",
+    "editTag": "Editar Tag",
+    "sound": "Som",
+    "soundDesc": "Sons de notificação",
+    "soundEnabled": "Ativado",
+    "language": "Idioma",
+    "languageDesc": "Escolha o idioma do app",
+    "tutorial": "Tutorial",
+    "tutorialDesc": "Rever o tutorial inicial",
+    "restartTutorial": "Reiniciar Tutorial"
+  },
+  "noteEditor": {
+    "title": "Nova Nota",
+    "editTitle": "Editar Nota",
+    "placeholder": "O que você está fazendo agora?",
+    "tags": "Tags",
+    "attachments": "Anexos",
+    "addAttachment": "Adicionar anexo",
+    "save": "Salvar",
+    "cancel": "Cancelar"
+  },
+  "confirmation": {
+    "deleteNote": "Excluir Nota",
+    "deleteNoteMsg": "Tem certeza que deseja excluir esta nota? Esta ação não pode ser desfeita.",
+    "deleteTag": "Excluir Tag",
+    "deleteTagMsg": "Tem certeza que deseja excluir esta tag?",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar"
+  },
+  "aiResult": {
+    "title": "Resumo IA",
+    "loading": "Gerando resumo...",
+    "error": "Erro ao gerar resumo",
+    "retry": "Tentar novamente",
+    "close": "Fechar"
+  },
+  "tagEditor": {
+    "title": "Nova Tag",
+    "editTitle": "Editar Tag",
+    "name": "Nome",
+    "namePlaceholder": "Nome da tag...",
+    "color": "Cor",
+    "preview": "Preview",
+    "save": "Salvar",
+    "cancel": "Cancelar"
+  },
+  "notification": {
+    "summaryPrompt": "Hora de registrar! O que você está fazendo?",
+    "offlinePrompt": "Você está offline. As notas serão sincronizadas depois.",
+    "cycleCheckin": "Check-in do ciclo! Registre seu progresso.",
+    "suggestConfig": "Dica: Ajuste o intervalo nas configurações."
+  },
+  "onboarding": {
+    "welcome": "Bem-vindo ao EasyDaily!",
+    "welcomeDesc": "Seu assistente de daily standup pessoal.",
+    "step1": "Registre Notas",
+    "step1Desc": "Anote o que está fazendo ao longo do dia.",
+    "step2": "Use Tags",
+    "step2Desc": "Organize suas notas com tags coloridas.",
+    "step3": "Resumo com IA",
+    "step3Desc": "Gere resumos automáticos do seu dia.",
+    "step4": "Notificações",
+    "step4Desc": "Receba lembretes para registrar suas atividades.",
+    "next": "Próximo",
+    "back": "Voltar",
+    "finish": "Começar!"
+  },
+  "common": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "loading": "Carregando...",
+    "today": "Hoje",
+    "yesterday": "Ontem"
+  }
+}

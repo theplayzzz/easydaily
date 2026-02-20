@@ -811,6 +811,8 @@ dependencies = [
  "tauri-plugin-log",
  "tokio",
  "uuid",
+ "winapi",
+ "winreg",
 ]
 
 [[package]]

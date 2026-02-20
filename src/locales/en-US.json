@@ -1,0 +1,119 @@
+{
+  "app": {
+    "title": "EasyDaily"
+  },
+  "nav": {
+    "quickActions": "Actions",
+    "history": "History",
+    "settings": "Settings"
+  },
+  "quickActions": {
+    "title": "EasyDaily",
+    "addNote": "Add Note",
+    "addNoteDesc": "Record what you're doing now",
+    "aiSummary": "Today's Summary",
+    "aiSummaryDesc": "Generate an AI summary",
+    "viewHistory": "View History",
+    "viewHistoryDesc": "Browse previous days",
+    "dailyGoal": "Daily Goal",
+    "dailyGoalDesc": "Set your main objective"
+  },
+  "history": {
+    "title": "History",
+    "search": "Search notes...",
+    "empty": "No notes found",
+    "emptyDesc": "Start by adding your first note!",
+    "notesCount": "{{count}} note",
+    "notesCount_plural": "{{count}} notes",
+    "exportDay": "Export Day",
+    "addNote": "Add Note"
+  },
+  "settings": {
+    "title": "Settings",
+    "cycle": "Notification Cycle",
+    "cycleDesc": "Interval between reminders",
+    "cycleMinutes": "{{count}} minutes",
+    "ai": "Artificial Intelligence",
+    "aiProvider": "AI Provider",
+    "aiApiKey": "API Key",
+    "aiApiKeyPlaceholder": "Paste your key here...",
+    "tags": "Tags",
+    "tagsDesc": "Manage your categories",
+    "newTag": "New Tag",
+    "editTag": "Edit Tag",
+    "sound": "Sound",
+    "soundDesc": "Notification sounds",
+    "soundEnabled": "Enabled",
+    "language": "Language",
+    "languageDesc": "Choose app language",
+    "tutorial": "Tutorial",
+    "tutorialDesc": "Review the initial tutorial",
+    "restartTutorial": "Restart Tutorial"
+  },
+  "noteEditor": {
+    "title": "New Note",
+    "editTitle": "Edit Note",
+    "placeholder": "What are you working on right now?",
+    "tags": "Tags",
+    "attachments": "Attachments",
+    "addAttachment": "Add attachment",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "confirmation": {
+    "deleteNote": "Delete Note",
+    "deleteNoteMsg": "Are you sure you want to delete this note? This action cannot be undone.",
+    "deleteTag": "Delete Tag",
+    "deleteTagMsg": "Are you sure you want to delete this tag?",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "aiResult": {
+    "title": "AI Summary",
+    "loading": "Generating summary...",
+    "error": "Error generating summary",
+    "retry": "Retry",
+    "close": "Close"
+  },
+  "tagEditor": {
+    "title": "New Tag",
+    "editTitle": "Edit Tag",
+    "name": "Name",
+    "namePlaceholder": "Tag name...",
+    "color": "Color",
+    "preview": "Preview",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "notification": {
+    "summaryPrompt": "Time to log! What are you working on?",
+    "offlinePrompt": "You are offline. Notes will be synced later.",
+    "cycleCheckin": "Cycle check-in! Log your progress.",
+    "suggestConfig": "Tip: Adjust the interval in settings."
+  },
+  "onboarding": {
+    "welcome": "Welcome to EasyDaily!",
+    "welcomeDesc": "Your personal daily standup assistant.",
+    "step1": "Record Notes",
+    "step1Desc": "Write down what you're doing throughout the day.",
+    "step2": "Use Tags",
+    "step2Desc": "Organize your notes with colorful tags.",
+    "step3": "AI Summary",
+    "step3Desc": "Generate automatic summaries of your day.",
+    "step4": "Notifications",
+    "step4Desc": "Get reminders to log your activities.",
+    "next": "Next",
+    "back": "Back",
+    "finish": "Get Started!"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "loading": "Loading...",
+    "today": "Today",
+    "yesterday": "Yesterday"
+  }
+}

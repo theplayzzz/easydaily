@@ -18,11 +18,17 @@
         "resizable": false,
         "center": true,
         "visible": true,
-        "decorations": true
+        "decorations": true,
+        "theme": "Dark"
       }
     ],
     "security": {
       "csp": null
+    },
+    "trayIcon": {
+      "id": "main",
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": false
     }
   },
   "bundle": {
