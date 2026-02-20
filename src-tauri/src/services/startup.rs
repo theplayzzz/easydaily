@@ -38,7 +38,7 @@ pub fn unregister_autostart() -> Result<(), String> {
 }
 
 pub fn run_startup_sequence(app_handle: AppHandle) {
-    tokio::spawn(async move {
+    tauri::async_runtime::spawn(async move {
         // Wait 2 seconds then prompt for summary
         tokio::time::sleep(Duration::from_secs(2)).await;
         let _ = app_handle.emit("startup:summary-prompt", ());

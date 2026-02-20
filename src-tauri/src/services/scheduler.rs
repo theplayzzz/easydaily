@@ -35,7 +35,7 @@ impl Scheduler {
         let scheduler = Arc::clone(self);
         let handle = app_handle.clone();
 
-        tokio::spawn(async move {
+        tauri::async_runtime::spawn(async move {
             loop {
                 let interval_minutes = {
                     let state = scheduler.state.lock().unwrap();

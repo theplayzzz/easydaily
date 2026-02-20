@@ -45,7 +45,7 @@ impl IdleDetector {
         let running = Arc::clone(self);
         let handle = app_handle.clone();
 
-        tokio::spawn(async move {
+        tauri::async_runtime::spawn(async move {
             let mut was_idle = false;
 
             while running.running.load(Ordering::SeqCst) {
