@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api/core";
 import { useStore } from "../stores/useStore";
 import type { Tag } from "../types";
 import { logger } from "../utils/logger";
@@ -8,24 +9,28 @@ export function useTags() {
   const updateTag = useStore((s) => s.updateTag);
   const removeTag = useStore((s) => s.removeTag);
 
-  const createTag = (data: { name: string; color: string }) => {
-    const tag: Tag = {
-      id: crypto.randomUUID(),
+  const createTag = async (data: { name: string; color: string }) => {
+    const tag = await invoke<Tag>("create_tag", {
       name: data.name,
       color: data.color,
-      isDefault: false,
-    };
+    });
     addTag(tag);
     logger.info("useTags", `Created tag: ${tag.name}`);
     return tag;
   };
 
-  const editTag = (id: string, updates: Partial<Tag>) => {
-    updateTag(id, updates);
+  const editTag = async (id: string, updates: Partial<Tag>) => {
+    const tag = await invoke<Tag>("update_tag", {
+      id,
+      name: updates.name ?? null,
+      color: updates.color ?? null,
+    });
+    updateTag(id, tag);
     logger.info("useTags", `Updated tag: ${id}`);
   };
 
-  const deleteTag = (id: string) => {
+  const deleteTag = async (id: string) => {
+    await invoke("delete_tag", { id });
     removeTag(id);
     logger.info("useTags", `Deleted tag: ${id}`);
   };

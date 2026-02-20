@@ -43,10 +43,5 @@ pub fn run_startup_sequence(app_handle: AppHandle) {
         tokio::time::sleep(Duration::from_secs(2)).await;
         let _ = app_handle.emit("startup:summary-prompt", ());
         log::info!("Startup: summary prompt emitted");
-
-        // Wait 60 more seconds then prompt for offline
-        tokio::time::sleep(Duration::from_secs(60)).await;
-        let _ = app_handle.emit("startup:offline-prompt", ());
-        log::info!("Startup: offline prompt emitted");
     });
 }

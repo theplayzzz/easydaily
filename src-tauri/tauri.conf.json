@@ -10,6 +10,7 @@
     "beforeBuildCommand": "npm run build"
   },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "title": "EasyDaily",
@@ -17,8 +18,8 @@
         "height": 500,
         "resizable": false,
         "center": true,
-        "visible": true,
-        "decorations": true,
+        "visible": false,
+        "decorations": false,
         "theme": "Dark"
       }
     ],

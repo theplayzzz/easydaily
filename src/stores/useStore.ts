@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import type { Config, Tag, DayData, Note, NotificationType } from "../types";
 import { Page } from "../types";
-import { mockConfig, mockTags, mockDays, mockDayDataCache } from "./mockData";
 import { logger } from "../utils/logger";
 
 interface NotificationState {
@@ -19,7 +18,7 @@ interface ModalsState {
     message: string;
     onConfirm: (() => void) | null;
   };
-  aiResult: { open: boolean; state: "loading" | "success" | "error"; content: string };
+  aiResult: { open: boolean; state: "loading" | "success" | "error"; content: string; summaryType: "daily_summary" | "combined_summary" | "standup" | null };
   onboarding: { open: boolean; step: number };
 }
 
@@ -45,6 +44,11 @@ interface AppState {
   updateTag: (id: string, updates: Partial<Tag>) => void;
   removeTag: (id: string) => void;
 
+  // Bulk setters (for backend init)
+  setTags: (tags: Tag[]) => void;
+  setDays: (days: string[]) => void;
+  setDayDataForDate: (date: string, data: DayData) => void;
+
   // Days / Notes
   setSelectedDay: (day: string | null) => void;
   loadDayData: (date: string) => void;
@@ -63,7 +67,7 @@ interface AppState {
   closeTagEditor: () => void;
   openConfirmation: (title: string, message: string, onConfirm: () => void) => void;
   closeConfirmation: () => void;
-  openAiResult: () => void;
+  openAiResult: (summaryType?: "daily_summary" | "combined_summary" | "standup") => void;
   setAiResultState: (state: "loading" | "success" | "error", content?: string) => void;
   closeAiResult: () => void;
   openOnboarding: () => void;
@@ -75,18 +79,27 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set, get) => ({
-  config: mockConfig,
-  tags: mockTags,
+  config: {
+    cycleInterval: 30,
+    activeProvider: "openai",
+    apiKeys: { openai: "", grok: "" },
+    sound: { enabled: true },
+    language: "pt-BR",
+    onboardingCompleted: false,
+    lastSessionDate: "",
+    windowPosition: { x: 0, y: 0 },
+  },
+  tags: [],
   currentPage: Page.QuickActions,
-  days: mockDays,
+  days: [],
   selectedDay: null,
-  dayDataCache: mockDayDataCache,
+  dayDataCache: {},
   notification: { visible: false, type: null, startedAt: null },
   modals: {
     noteEditor: { open: false, noteId: null },
     tagEditor: { open: false, tagId: null },
     confirmation: { open: false, title: "", message: "", onConfirm: null },
-    aiResult: { open: false, state: "loading", content: "" },
+    aiResult: { open: false, state: "loading", content: "", summaryType: null },
     onboarding: { open: false, step: 0 },
   },
   isLoading: false,
@@ -118,6 +131,23 @@ export const useStore = create<AppState>((set, get) => ({
   removeTag: (id) => {
     logger.info("Store", `Tag removed: ${id}`);
     set((s) => ({ tags: s.tags.filter((t) => t.id !== id) }));
+  },
+
+  setTags: (tags) => {
+    logger.info("Store", `Tags set: ${tags.length} tags`);
+    set({ tags });
+  },
+
+  setDays: (days) => {
+    logger.info("Store", `Days set: ${days.length} days`);
+    set({ days });
+  },
+
+  setDayDataForDate: (date, data) => {
+    logger.debug("Store", `Day data set for: ${date}`);
+    set((s) => ({
+      dayDataCache: { ...s.dayDataCache, [date]: data },
+    }));
   },
 
   setSelectedDay: (day) => {
@@ -250,10 +280,10 @@ export const useStore = create<AppState>((set, get) => ({
     }));
   },
 
-  openAiResult: () => {
-    logger.info("Store", "AI result opened");
+  openAiResult: (summaryType = "daily_summary" as const) => {
+    logger.info("Store", `AI result opened: ${summaryType}`);
     set((s) => ({
-      modals: { ...s.modals, aiResult: { open: true, state: "loading", content: "" } },
+      modals: { ...s.modals, aiResult: { open: true, state: "loading", content: "", summaryType } },
     }));
   },
 
@@ -267,7 +297,7 @@ export const useStore = create<AppState>((set, get) => ({
   closeAiResult: () => {
     logger.info("Store", "AI result closed");
     set((s) => ({
-      modals: { ...s.modals, aiResult: { open: false, state: "loading", content: "" } },
+      modals: { ...s.modals, aiResult: { open: false, state: "loading", content: "", summaryType: null } },
     }));
   },
 

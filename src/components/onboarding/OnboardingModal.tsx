@@ -1,15 +1,17 @@
-import { PenLine, Tags, Sparkles, Bell } from "lucide-react";
+import { useState } from "react";
+import { PenLine, Sparkles, Tags, Bell } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Modal, Button } from "../common";
+import { Modal, Button, Input, Select } from "../common";
 import { useStore } from "../../stores/useStore";
+import { useConfig } from "../../hooks/useConfig";
 import { cn } from "../../utils/cn";
 
 const steps = [
   { icon: null, titleKey: "onboarding.welcome", descKey: "onboarding.welcomeDesc" },
   { icon: PenLine, titleKey: "onboarding.step1", descKey: "onboarding.step1Desc" },
-  { icon: Tags, titleKey: "onboarding.step2", descKey: "onboarding.step2Desc" },
-  { icon: Sparkles, titleKey: "onboarding.step3", descKey: "onboarding.step3Desc" },
-  { icon: Bell, titleKey: "onboarding.step4", descKey: "onboarding.step4Desc" },
+  { icon: Sparkles, titleKey: "onboarding.step2", descKey: "onboarding.step2ApiKeyDesc" },
+  { icon: Tags, titleKey: "onboarding.step3", descKey: "onboarding.step3Desc" },
+  { icon: Bell, titleKey: "onboarding.step5", descKey: "onboarding.step5Desc" },
 ];
 
 export function OnboardingModal() {
@@ -17,13 +19,26 @@ export function OnboardingModal() {
   const { open, step } = useStore((s) => s.modals.onboarding);
   const closeOnboarding = useStore((s) => s.closeOnboarding);
   const setOnboardingStep = useStore((s) => s.setOnboardingStep);
+  const { updateConfig } = useConfig();
+
+  const [pendingProvider, setPendingProvider] = useState<"openai" | "grok">("openai");
+  const [pendingApiKey, setPendingApiKey] = useState("");
 
   const current = steps[step];
   const isFirst = step === 0;
   const isLast = step === steps.length - 1;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isLast) {
+      const updates: Record<string, unknown> = { onboardingCompleted: true };
+      if (pendingApiKey.trim()) {
+        updates.activeProvider = pendingProvider;
+        updates.apiKeys = {
+          openai: pendingProvider === "openai" ? pendingApiKey.trim() : "",
+          grok: pendingProvider === "grok" ? pendingApiKey.trim() : "",
+        };
+      }
+      await updateConfig(updates as Parameters<typeof updateConfig>[0]);
       closeOnboarding();
     } else {
       setOnboardingStep(step + 1);
@@ -55,6 +70,39 @@ export function OnboardingModal() {
         <p className="text-sm text-text-secondary leading-relaxed">
           {t(current.descKey)}
         </p>
+
+        {/* Step 2: API Key configuration */}
+        {step === 2 && (
+          <div className="w-full mt-4 space-y-3 text-left">
+            <div>
+              <label className="text-xs font-medium text-text-secondary mb-1 block">
+                {t("onboarding.apiProvider")}
+              </label>
+              <Select
+                value={pendingProvider}
+                onChange={(e) => setPendingProvider(e.target.value as "openai" | "grok")}
+                options={[
+                  { value: "openai", label: "OpenAI" },
+                  { value: "grok", label: "GROK (xAI)" },
+                ]}
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-text-secondary mb-1 block">
+                {t("onboarding.apiKey")}
+              </label>
+              <Input
+                type="password"
+                value={pendingApiKey}
+                onChange={(e) => setPendingApiKey(e.target.value)}
+                placeholder={t("onboarding.apiKeyPlaceholder")}
+              />
+            </div>
+            <p className="text-[11px] text-text-secondary">
+              {t("onboarding.apiKeyNote")}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Progress dots */}

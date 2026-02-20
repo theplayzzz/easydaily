@@ -64,23 +64,27 @@ export function NoteEditorModal() {
     );
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editor) return;
     const content = editor.getText();
     const contentHtml = editor.getHTML();
     if (!content.trim()) return;
 
-    if (existingNote) {
-      const date = Object.entries(dayDataCache).find(([, d]) =>
-        d.notes.some((n) => n.id === noteId),
-      )?.[0];
-      if (date && noteId) {
-        editNote(date, noteId, { content, contentHtml, tags: selectedTags });
+    try {
+      if (existingNote) {
+        const date = Object.entries(dayDataCache).find(([, d]) =>
+          d.notes.some((n) => n.id === noteId),
+        )?.[0];
+        if (date && noteId) {
+          await editNote(date, noteId, { content, contentHtml, tags: selectedTags });
+        }
+      } else {
+        await createNote({ content, contentHtml, tags: selectedTags });
       }
-    } else {
-      createNote({ content, contentHtml, tags: selectedTags });
+      closeNoteEditor();
+    } catch (err) {
+      console.error("Failed to save note:", err);
     }
-    closeNoteEditor();
   };
 
   const toolbarButtons = [

@@ -1,24 +1,24 @@
+import { useState } from "react";
 import { PenLine, Sparkles, Calendar, Target } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Card } from "../components/common";
+import { StandupPlanModal } from "../components/common/StandupPlanModal";
 import { useStore } from "../stores/useStore";
-import { Page } from "../types";
-import { mockAiSummary } from "../stores/mockData";
+import { useAiSummary } from "../hooks/useAiSummary";
 
 const actions = [
   { icon: PenLine, labelKey: "quickActions.addNote", descKey: "quickActions.addNoteDesc", color: "#39FF14" },
   { icon: Sparkles, labelKey: "quickActions.aiSummary", descKey: "quickActions.aiSummaryDesc", color: "#BF40FF" },
-  { icon: Calendar, labelKey: "quickActions.viewHistory", descKey: "quickActions.viewHistoryDesc", color: "#00D4FF" },
-  { icon: Target, labelKey: "quickActions.dailyGoal", descKey: "quickActions.dailyGoalDesc", color: "#FFAA00" },
+  { icon: Calendar, labelKey: "quickActions.combinedSummary", descKey: "quickActions.combinedSummaryDesc", color: "#00D4FF" },
+  { icon: Target, labelKey: "quickActions.standup", descKey: "quickActions.standupDesc", color: "#FFAA00" },
 ] as const;
 
 export function QuickActionsPage() {
   const { t } = useTranslation();
   const openNoteEditor = useStore((s) => s.openNoteEditor);
-  const setCurrentPage = useStore((s) => s.setCurrentPage);
-  const openAiResult = useStore((s) => s.openAiResult);
-  const setAiResultState = useStore((s) => s.setAiResultState);
+  const { generateDailySummary, generateCombinedSummary, generateStandup } = useAiSummary();
+  const [standupOpen, setStandupOpen] = useState(false);
 
   const handleAction = (index: number) => {
     switch (index) {
@@ -26,14 +26,13 @@ export function QuickActionsPage() {
         openNoteEditor();
         break;
       case 1:
-        openAiResult();
-        setTimeout(() => setAiResultState("success", mockAiSummary), 1500);
+        generateDailySummary();
         break;
       case 2:
-        setCurrentPage(Page.History);
+        generateCombinedSummary();
         break;
       case 3:
-        // Daily goal — placeholder
+        setStandupOpen(true);
         break;
     }
   };
@@ -68,6 +67,12 @@ export function QuickActionsPage() {
           );
         })}
       </div>
+
+      <StandupPlanModal
+        open={standupOpen}
+        onClose={() => setStandupOpen(false)}
+        onConfirm={(plan) => generateStandup(plan)}
+      />
     </PageContainer>
   );
 }

@@ -2,7 +2,6 @@
 
 export enum NotificationType {
   SummaryPrompt = "summary_prompt",
-  OfflinePrompt = "offline_prompt",
   CycleCheckin = "cycle_checkin",
   SuggestConfig = "suggest_config",
 }

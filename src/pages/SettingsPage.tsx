@@ -8,6 +8,7 @@ import { useTags } from "../hooks/useTags";
 import { useStore } from "../stores/useStore";
 
 const cycleOptions = [
+  { value: "1", label: "1 min (teste)" },
   { value: "15", label: "15 min" },
   { value: "30", label: "30 min" },
   { value: "45", label: "45 min" },
@@ -29,10 +30,9 @@ const languageOptions = [
 export function SettingsPage() {
   const { t } = useTranslation();
   const { config, updateConfig } = useConfig();
-  const { tags } = useTags();
+  const { tags, deleteTag } = useTags();
   const openTagEditor = useStore((s) => s.openTagEditor);
   const openConfirmation = useStore((s) => s.openConfirmation);
-  const removeTag = useStore((s) => s.removeTag);
   const openOnboarding = useStore((s) => s.openOnboarding);
 
   return (
@@ -130,7 +130,7 @@ export function SettingsPage() {
                           openConfirmation(
                             t("confirmation.deleteTag"),
                             t("confirmation.deleteTagMsg"),
-                            () => removeTag(tag.id),
+                            () => { deleteTag(tag.id); },
                           )
                         }
                         className="p-1 rounded text-text-secondary hover:text-state-error transition-colors"

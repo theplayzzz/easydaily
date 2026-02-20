@@ -1,7 +1,7 @@
+use winapi::shared::windef::RECT;
 use winapi::um::winuser::{
     GetForegroundWindow, GetSystemMetrics, GetWindowRect, SM_CXSCREEN, SM_CYSCREEN,
 };
-use winapi::shared::windef::RECT;
 
 pub fn is_fullscreen_app_active() -> bool {
     unsafe {
@@ -21,6 +21,13 @@ pub fn is_fullscreen_app_active() -> bool {
         let window_width = rect.right - rect.left;
         let window_height = rect.bottom - rect.top;
 
-        window_width >= screen_width && window_height >= screen_height
+        // On Windows 10, maximized windows extend ~7px beyond the screen on
+        // each side (invisible resize borders), so rect.left is typically -7.
+        // True fullscreen windows (games, video players, presentations) start
+        // at exactly (0,0). We use a threshold of -2 to distinguish the two.
+        let is_covering_screen = window_width >= screen_width && window_height >= screen_height;
+        let is_true_fullscreen = rect.left >= -1 && rect.top >= -1;
+
+        is_covering_screen && is_true_fullscreen
     }
 }

@@ -1,8 +1,13 @@
+use std::ptr;
+
 use tauri::{AppHandle, Manager};
-use winapi::um::winuser::{MessageBeep, MB_ICONINFORMATION};
+use winapi::um::playsoundapi::PlaySoundW;
 
 use crate::services::fullscreen;
 use crate::services::idle::IdleDetector;
+
+const SND_ASYNC: u32 = 0x0001;
+const SND_ALIAS: u32 = 0x0001_0000;
 
 #[tauri::command]
 pub fn show_window(app: AppHandle) -> Result<(), String> {
@@ -32,8 +37,11 @@ pub fn get_idle_seconds() -> u64 {
 
 #[tauri::command]
 pub fn play_notification_sound() -> Result<(), String> {
+    // Play the Windows system "SystemNotification" sound via PlaySoundW.
+    // This is more reliable than MessageBeep which is often silent.
+    let alias: Vec<u16> = "SystemNotification\0".encode_utf16().collect();
     unsafe {
-        MessageBeep(MB_ICONINFORMATION);
+        PlaySoundW(alias.as_ptr(), ptr::null_mut(), SND_ALIAS | SND_ASYNC);
     }
     Ok(())
 }

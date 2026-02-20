@@ -98,6 +98,8 @@ pub fn run() {
             commands::system::get_idle_seconds,
             commands::system::play_notification_sound,
             commands::system::is_fullscreen_app_active,
+            // AI
+            commands::ai::generate_summary,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

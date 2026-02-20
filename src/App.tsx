@@ -1,7 +1,9 @@
-import { useEffect } from "react";
-import { Page } from "./types";
+import { Page, NotificationType } from "./types";
 import { useStore } from "./stores/useStore";
+import { useInitializeApp } from "./hooks/useInitializeApp";
+import { useBackendEvents } from "./hooks/useBackendEvents";
 import { Navbar } from "./components/layout/Navbar";
+import { Titlebar } from "./components/layout/Titlebar";
 import { QuickActionsPage } from "./pages/QuickActionsPage";
 import { HistoryPage } from "./pages/HistoryPage";
 import { SettingsPage } from "./pages/SettingsPage";
@@ -10,8 +12,11 @@ import { ConfirmationModal } from "./components/common/ConfirmationModal";
 import { AiResultModal } from "./components/common/AiResultModal";
 import { TagEditorModal } from "./components/common/TagEditorModal";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
-import { NotificationPopup } from "./components/notification/NotificationPopup";
-import { logger } from "./utils/logger";
+import { NotificationWindow } from "./components/notification/NotificationWindow";
+
+// Check if this is a notification popup window
+const params = new URLSearchParams(window.location.search);
+const notificationType = params.get("notification") as NotificationType | null;
 
 function CurrentPage() {
   const currentPage = useStore((s) => s.currentPage);
@@ -28,13 +33,13 @@ function CurrentPage() {
   }
 }
 
-function App() {
-  useEffect(() => {
-    logger.info("App", "EasyDaily initialized");
-  }, []);
+function MainApp() {
+  useInitializeApp();
+  useBackendEvents();
 
   return (
     <main className="w-[400px] h-[500px] bg-bg-primary text-text-primary font-sans flex flex-col relative overflow-hidden rounded-lg">
+      <Titlebar />
       <div className="flex-1 overflow-hidden">
         <CurrentPage />
       </div>
@@ -46,11 +51,16 @@ function App() {
       <AiResultModal />
       <TagEditorModal />
       <OnboardingModal />
-
-      {/* Notification */}
-      <NotificationPopup />
     </main>
   );
+}
+
+function App() {
+  if (notificationType) {
+    return <NotificationWindow type={notificationType} />;
+  }
+
+  return <MainApp />;
 }
 
 export default App;

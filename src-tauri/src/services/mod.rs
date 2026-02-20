@@ -1,3 +1,4 @@
+pub mod ai;
 pub mod fullscreen;
 pub mod idle;
 pub mod scheduler;

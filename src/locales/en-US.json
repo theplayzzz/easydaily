@@ -13,10 +13,10 @@
     "addNoteDesc": "Record what you're doing now",
     "aiSummary": "Today's Summary",
     "aiSummaryDesc": "Generate an AI summary",
-    "viewHistory": "View History",
-    "viewHistoryDesc": "Browse previous days",
-    "dailyGoal": "Daily Goal",
-    "dailyGoalDesc": "Set your main objective"
+    "combinedSummary": "Summary: Yesterday + Today",
+    "combinedSummaryDesc": "Compare yesterday and today activities",
+    "standup": "Daily: Yesterday + Plan",
+    "standupDesc": "Generate your standup with AI"
   },
   "history": {
     "title": "History",
@@ -71,7 +71,14 @@
   "aiResult": {
     "title": "AI Summary",
     "loading": "Generating summary...",
+    "generatedBy": "AI Generated",
+    "copy": "Copy",
+    "copied": "Copied!",
     "error": "Error generating summary",
+    "errorInvalidKey": "Invalid API key. Check your settings.",
+    "errorNoConnection": "No connection to the AI server.",
+    "errorRateLimited": "Rate limit reached. Try again in a few minutes.",
+    "errorTimeout": "The request took too long. Try again.",
     "retry": "Retry",
     "close": "Close"
   },
@@ -87,7 +94,6 @@
   },
   "notification": {
     "summaryPrompt": "Time to log! What are you working on?",
-    "offlinePrompt": "You are offline. Notes will be synced later.",
     "cycleCheckin": "Cycle check-in! Log your progress.",
     "suggestConfig": "Tip: Adjust the interval in settings."
   },
@@ -96,15 +102,28 @@
     "welcomeDesc": "Your personal daily standup assistant.",
     "step1": "Record Notes",
     "step1Desc": "Write down what you're doing throughout the day.",
-    "step2": "Use Tags",
-    "step2Desc": "Organize your notes with colorful tags.",
-    "step3": "AI Summary",
-    "step3Desc": "Generate automatic summaries of your day.",
-    "step4": "Notifications",
-    "step4Desc": "Get reminders to log your activities.",
+    "step2": "Configure AI",
+    "step2Desc": "Connect your API key to generate automatic summaries.",
+    "step2ApiKeyDesc": "Enter your AI provider key to enable summaries.",
+    "apiProvider": "Provider",
+    "apiKey": "API Key",
+    "apiKeyPlaceholder": "sk-...",
+    "apiKeyNote": "Optional — you can configure this later in Settings.",
+    "step3": "Use Tags",
+    "step3Desc": "Organize your notes with colorful tags.",
+    "step4": "AI Summary",
+    "step4Desc": "Generate automatic summaries of your day.",
+    "step5": "Notifications",
+    "step5Desc": "Get reminders to log your activities.",
     "next": "Next",
     "back": "Back",
     "finish": "Get Started!"
+  },
+  "standup": {
+    "title": "Today's Plan",
+    "placeholder": "What will you do today?",
+    "generate": "Generate Standup",
+    "cancel": "Cancel"
   },
   "common": {
     "save": "Save",

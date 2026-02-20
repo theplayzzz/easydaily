@@ -36,14 +36,18 @@ export function TagEditorModal() {
     }
   }, [open, existingTag]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!name.trim()) return;
-    if (existingTag) {
-      editTag(existingTag.id, { name: name.trim(), color });
-    } else {
-      createTag({ name: name.trim(), color });
+    try {
+      if (existingTag) {
+        await editTag(existingTag.id, { name: name.trim(), color });
+      } else {
+        await createTag({ name: name.trim(), color });
+      }
+      closeTagEditor();
+    } catch (err) {
+      console.error("Failed to save tag:", err);
     }
-    closeTagEditor();
   };
 
   return (

@@ -13,10 +13,10 @@
     "addNoteDesc": "Registre o que está fazendo agora",
     "aiSummary": "Resumo de Hoje",
     "aiSummaryDesc": "Gere um resumo com IA",
-    "viewHistory": "Ver Histórico",
-    "viewHistoryDesc": "Navegue por dias anteriores",
-    "dailyGoal": "Meta do Dia",
-    "dailyGoalDesc": "Defina seu objetivo principal"
+    "combinedSummary": "Resumo: Ontem + Hoje",
+    "combinedSummaryDesc": "Compare atividades de ontem e hoje",
+    "standup": "Daily: Ontem + Plano",
+    "standupDesc": "Gere seu standup com IA"
   },
   "history": {
     "title": "Histórico",
@@ -71,7 +71,14 @@
   "aiResult": {
     "title": "Resumo IA",
     "loading": "Gerando resumo...",
+    "generatedBy": "Gerado por IA",
+    "copy": "Copiar",
+    "copied": "Copiado!",
     "error": "Erro ao gerar resumo",
+    "errorInvalidKey": "Chave de API inválida. Verifique nas configurações.",
+    "errorNoConnection": "Sem conexão com o servidor de IA.",
+    "errorRateLimited": "Limite de requisições atingido. Tente novamente em alguns minutos.",
+    "errorTimeout": "A requisição demorou demais. Tente novamente.",
     "retry": "Tentar novamente",
     "close": "Fechar"
   },
@@ -87,7 +94,6 @@
   },
   "notification": {
     "summaryPrompt": "Hora de registrar! O que você está fazendo?",
-    "offlinePrompt": "Você está offline. As notas serão sincronizadas depois.",
     "cycleCheckin": "Check-in do ciclo! Registre seu progresso.",
     "suggestConfig": "Dica: Ajuste o intervalo nas configurações."
   },
@@ -96,15 +102,28 @@
     "welcomeDesc": "Seu assistente de daily standup pessoal.",
     "step1": "Registre Notas",
     "step1Desc": "Anote o que está fazendo ao longo do dia.",
-    "step2": "Use Tags",
-    "step2Desc": "Organize suas notas com tags coloridas.",
-    "step3": "Resumo com IA",
-    "step3Desc": "Gere resumos automáticos do seu dia.",
-    "step4": "Notificações",
-    "step4Desc": "Receba lembretes para registrar suas atividades.",
+    "step2": "Configure a IA",
+    "step2Desc": "Conecte sua chave de API para gerar resumos automáticos.",
+    "step2ApiKeyDesc": "Informe a chave do provedor de IA para ativar os resumos.",
+    "apiProvider": "Provedor",
+    "apiKey": "Chave da API",
+    "apiKeyPlaceholder": "sk-...",
+    "apiKeyNote": "Opcional — você pode configurar depois em Configurações.",
+    "step3": "Use Tags",
+    "step3Desc": "Organize suas notas com tags coloridas.",
+    "step4": "Resumo com IA",
+    "step4Desc": "Gere resumos automáticos do seu dia.",
+    "step5": "Notificações",
+    "step5Desc": "Receba lembretes para registrar suas atividades.",
     "next": "Próximo",
     "back": "Voltar",
     "finish": "Começar!"
+  },
+  "standup": {
+    "title": "Plano de Hoje",
+    "placeholder": "O que você vai fazer hoje?",
+    "generate": "Gerar Standup",
+    "cancel": "Cancelar"
   },
   "common": {
     "save": "Salvar",
