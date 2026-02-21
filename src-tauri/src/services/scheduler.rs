@@ -5,6 +5,7 @@ use std::time::Duration;
 use tauri::{AppHandle, Emitter};
 
 use crate::services::fullscreen;
+use crate::services::notification;
 
 struct SchedulerState {
     interval_minutes: u32,
@@ -59,6 +60,7 @@ impl Scheduler {
 
                     if state.consecutive_skips >= 2 {
                         let _ = handle.emit("scheduler:suggest-config", ());
+                        notification::show_notification(&handle, "suggest_config", false);
                     }
                     continue;
                 }
@@ -70,6 +72,7 @@ impl Scheduler {
                 }
 
                 let _ = handle.emit("scheduler:cycle-complete", ());
+                notification::show_notification(&handle, "cycle_checkin", true);
                 log::info!("Scheduler: cycle complete");
             }
         });

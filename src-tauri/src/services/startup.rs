@@ -1,8 +1,10 @@
 use std::time::Duration;
 
-use tauri::{AppHandle, Emitter};
+use tauri::AppHandle;
 use winreg::enums::*;
 use winreg::RegKey;
+
+use crate::services::notification;
 
 const APP_NAME: &str = "EasyDaily";
 const RUN_KEY: &str = r"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -39,9 +41,9 @@ pub fn unregister_autostart() -> Result<(), String> {
 
 pub fn run_startup_sequence(app_handle: AppHandle) {
     tauri::async_runtime::spawn(async move {
-        // Wait 2 seconds then prompt for summary
+        // Wait 2 seconds then show summary prompt notification
         tokio::time::sleep(Duration::from_secs(2)).await;
-        let _ = app_handle.emit("startup:summary-prompt", ());
-        log::info!("Startup: summary prompt emitted");
+        notification::show_notification(&app_handle, "summary_prompt", true);
+        log::info!("Startup: summary prompt shown");
     });
 }

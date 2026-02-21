@@ -5,6 +5,7 @@ import { Card, Select, Toggle, Button, TagChip } from "../components/common";
 import { Input } from "../components/common";
 import { useConfig } from "../hooks/useConfig";
 import { useTags } from "../hooks/useTags";
+import { useAiUsage } from "../hooks/useAiUsage";
 import { useStore } from "../stores/useStore";
 
 const cycleOptions = [
@@ -31,6 +32,7 @@ export function SettingsPage() {
   const { t } = useTranslation();
   const { config, updateConfig } = useConfig();
   const { tags, deleteTag } = useTags();
+  const { stats, period, changePeriod, loading } = useAiUsage();
   const openTagEditor = useStore((s) => s.openTagEditor);
   const openConfirmation = useStore((s) => s.openConfirmation);
   const openOnboarding = useStore((s) => s.openOnboarding);
@@ -88,6 +90,61 @@ export function SettingsPage() {
                   })
                 }
               />
+            </div>
+
+            {/* AI Usage Stats */}
+            <div className="border-t border-border pt-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-medium text-text-secondary">
+                  {t("settings.aiUsage")}
+                </label>
+                <div className="flex gap-1">
+                  {(["7d", "30d", "all"] as const).map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => changePeriod(p)}
+                      className={`px-2 py-0.5 text-[10px] rounded-full transition-colors ${
+                        period === p
+                          ? "bg-accent text-white"
+                          : "bg-bg-secondary text-text-secondary hover:text-text-primary"
+                      }`}
+                    >
+                      {t(
+                        p === "7d"
+                          ? "settings.aiUsagePeriod7d"
+                          : p === "30d"
+                            ? "settings.aiUsagePeriod30d"
+                            : "settings.aiUsagePeriodAll"
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {loading ? (
+                <div className="text-xs text-text-secondary">{t("common.loading")}</div>
+              ) : stats.callCount === 0 ? (
+                <div className="text-xs text-text-secondary">{t("settings.aiUsageNoCalls")}</div>
+              ) : (
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-bg-secondary rounded-lg p-2 text-center">
+                    <div className="text-sm font-semibold text-text-primary">{stats.callCount}</div>
+                    <div className="text-[10px] text-text-secondary">{t("settings.aiUsageCalls")}</div>
+                  </div>
+                  <div className="bg-bg-secondary rounded-lg p-2 text-center">
+                    <div className="text-sm font-semibold text-text-primary">
+                      {stats.totalTokens.toLocaleString()}
+                    </div>
+                    <div className="text-[10px] text-text-secondary">{t("settings.aiUsageTokens")}</div>
+                  </div>
+                  <div className="bg-bg-secondary rounded-lg p-2 text-center">
+                    <div className="text-sm font-semibold text-text-primary">
+                      ${stats.totalCostUsd.toFixed(4)}
+                    </div>
+                    <div className="text-[10px] text-text-secondary">{t("settings.aiUsageCost")}</div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </Card>

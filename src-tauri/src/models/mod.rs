@@ -130,6 +130,41 @@ impl Default for Config {
     }
 }
 
+// --- AI Usage Tracking ---
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct AiUsageEntry {
+    pub timestamp: String,
+    pub provider: String,
+    pub model: String,
+    pub prompt_tokens: u64,
+    pub completion_tokens: u64,
+    pub total_tokens: u64,
+    pub estimated_cost_usd: f64,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct AiUsageData {
+    pub entries: Vec<AiUsageEntry>,
+}
+
+impl Default for AiUsageData {
+    fn default() -> Self {
+        AiUsageData { entries: vec![] }
+    }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct AiUsageStats {
+    pub total_prompt_tokens: u64,
+    pub total_completion_tokens: u64,
+    pub total_tokens: u64,
+    pub total_cost_usd: f64,
+    pub call_count: u32,
+}
+
 pub fn default_tags() -> Vec<Tag> {
     vec![
         Tag {

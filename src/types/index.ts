@@ -52,6 +52,16 @@ export interface Tag {
   isDefault: boolean;
 }
 
+// --- AI Usage ---
+
+export interface AiUsageStats {
+  totalPromptTokens: number;
+  totalCompletionTokens: number;
+  totalTokens: number;
+  totalCostUsd: number;
+  callCount: number;
+}
+
 // --- Configuration ---
 
 export interface ApiKeys {

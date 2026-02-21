@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::PathBuf;
 
-use crate::models::{default_tags, Config, DayData, Tag};
+use crate::models::{default_tags, AiUsageData, AiUsageEntry, Config, DayData, Tag};
 
 pub struct StorageService {
     base_dir: PathBuf,
@@ -117,6 +117,31 @@ impl StorageService {
         let content = serde_json::to_string_pretty(tags)
             .map_err(|e| format!("Failed to serialize tags: {}", e))?;
         fs::write(&path, content).map_err(|e| format!("Failed to write tags: {}", e))
+    }
+
+    // --- AI Usage ---
+
+    pub fn load_ai_usage(&self) -> Result<AiUsageData, String> {
+        let path = self.base_dir.join("ai_usage.json");
+        if !path.exists() {
+            return Ok(AiUsageData::default());
+        }
+        let content =
+            fs::read_to_string(&path).map_err(|e| format!("Failed to read ai_usage: {}", e))?;
+        serde_json::from_str(&content).map_err(|e| format!("Failed to parse ai_usage: {}", e))
+    }
+
+    pub fn save_ai_usage(&self, data: &AiUsageData) -> Result<(), String> {
+        let path = self.base_dir.join("ai_usage.json");
+        let content = serde_json::to_string_pretty(data)
+            .map_err(|e| format!("Failed to serialize ai_usage: {}", e))?;
+        fs::write(&path, content).map_err(|e| format!("Failed to write ai_usage: {}", e))
+    }
+
+    pub fn append_ai_usage_entry(&self, entry: AiUsageEntry) -> Result<(), String> {
+        let mut data = self.load_ai_usage()?;
+        data.entries.push(entry);
+        self.save_ai_usage(&data)
     }
 
     // --- Attachments ---

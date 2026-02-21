@@ -1124,7 +1124,7 @@ Implementar registro automático para iniciar com Windows.
 | 14 | Deixar mouse/teclado parado por 1+ minuto | get_idle_seconds retorna > 60 |
 | 15 | Verificar logs no console/arquivo | Operações estão sendo logadas |
 
-**Critério de aprovação:** Todos os 15 itens OK para avançar para Fase 4.
+**Critério de aprovação:** Todoos os 15 itens OK para avançar para Fase 4.
 
 ---
 

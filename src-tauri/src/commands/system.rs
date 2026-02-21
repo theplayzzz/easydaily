@@ -50,3 +50,20 @@ pub fn play_notification_sound() -> Result<(), String> {
 pub fn is_fullscreen_app_active() -> bool {
     fullscreen::is_fullscreen_app_active()
 }
+
+#[tauri::command]
+pub fn get_data_path() -> Result<String, String> {
+    let path = dirs::data_dir()
+        .ok_or("Could not determine data directory")?
+        .join("EasyDaily");
+    Ok(path.to_string_lossy().to_string())
+}
+
+#[tauri::command]
+pub fn get_log_path(app: AppHandle) -> Result<String, String> {
+    let path = app
+        .path()
+        .app_log_dir()
+        .map_err(|e| format!("Failed to get log dir: {}", e))?;
+    Ok(path.to_string_lossy().to_string())
+}

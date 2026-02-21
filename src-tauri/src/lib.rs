@@ -29,6 +29,8 @@ pub fn run() {
         .plugin(
             tauri_plugin_log::Builder::default()
                 .level(log::LevelFilter::Info)
+                .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepAll)
+                .max_file_size(5_000_000) // 5MB per file
                 .build(),
         )
         .manage(storage)
@@ -98,8 +100,11 @@ pub fn run() {
             commands::system::get_idle_seconds,
             commands::system::play_notification_sound,
             commands::system::is_fullscreen_app_active,
+            commands::system::get_data_path,
+            commands::system::get_log_path,
             // AI
             commands::ai::generate_summary,
+            commands::ai::get_ai_usage_stats,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
