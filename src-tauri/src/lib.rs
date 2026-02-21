@@ -68,9 +68,15 @@ pub fn run() {
             // Run startup sequence
             services::startup::run_startup_sequence(setup_handle.clone());
 
-            // Register autostart (non-fatal if it fails)
-            if let Err(e) = services::startup::register_autostart() {
-                log::warn!("Failed to register autostart: {}", e);
+            // Register/unregister autostart based on config (non-fatal if it fails)
+            if config.autostart {
+                if let Err(e) = services::startup::register_autostart() {
+                    log::warn!("Failed to register autostart: {}", e);
+                }
+            } else {
+                if let Err(e) = services::startup::unregister_autostart() {
+                    log::warn!("Failed to unregister autostart: {}", e);
+                }
             }
 
             Ok(())

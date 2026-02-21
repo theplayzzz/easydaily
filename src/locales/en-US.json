@@ -52,6 +52,8 @@
     "sound": "Sound",
     "soundDesc": "Notification sounds",
     "soundEnabled": "Enabled",
+    "autostart": "Start with Windows",
+    "autostartDesc": "Open EasyDaily automatically when your computer starts",
     "language": "Language",
     "languageDesc": "Choose app language",
     "tutorial": "Tutorial",

@@ -87,4 +87,5 @@ export interface Config {
   onboardingCompleted: boolean;
   lastSessionDate: string;
   windowPosition: WindowPosition;
+  autostart: boolean;
 }

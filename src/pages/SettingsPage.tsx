@@ -218,6 +218,22 @@ export function SettingsPage() {
           </div>
         </Card>
 
+        {/* Autostart */}
+        <Card>
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-text-primary">
+                {t("settings.autostart")}
+              </h3>
+              <p className="text-xs text-text-secondary">{t("settings.autostartDesc")}</p>
+            </div>
+            <Toggle
+              checked={config.autostart}
+              onChange={(autostart) => updateConfig({ autostart })}
+            />
+          </div>
+        </Card>
+
         {/* Language */}
         <Card>
           <div className="space-y-2">
