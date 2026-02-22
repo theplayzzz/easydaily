@@ -6,3 +6,4 @@ export { useInitializeApp } from "./useInitializeApp";
 export { useBackendEvents } from "./useBackendEvents";
 export { useAiSummary } from "./useAiSummary";
 export { useAiUsage } from "./useAiUsage";
+export { useUpdater } from "./useUpdater";

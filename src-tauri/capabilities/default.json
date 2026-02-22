@@ -17,6 +17,8 @@
     "core:webview:allow-create-webview-window",
     "core:webview:allow-webview-close",
     "core:tray:default",
-    "core:event:default"
+    "core:event:default",
+    "updater:default",
+    "process:allow-restart"
   ]
 }

@@ -33,6 +33,8 @@ pub fn run() {
                 .max_file_size(5_000_000) // 5MB per file
                 .build(),
         )
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .manage(storage)
         .manage(scheduler.clone())
         .manage(idle_detector.clone())

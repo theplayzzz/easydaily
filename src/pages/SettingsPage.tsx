@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 import { PageContainer } from "../components/layout/PageContainer";
 import { Card, Select, Toggle, Button, TagChip } from "../components/common";
 import { Input } from "../components/common";
 import { useConfig } from "../hooks/useConfig";
 import { useTags } from "../hooks/useTags";
 import { useAiUsage } from "../hooks/useAiUsage";
+import { useUpdater } from "../hooks/useUpdater";
 import { useStore } from "../stores/useStore";
 
 const cycleOptions = [
@@ -33,6 +34,7 @@ export function SettingsPage() {
   const { config, updateConfig } = useConfig();
   const { tags, deleteTag } = useTags();
   const { stats, period, changePeriod, loading } = useAiUsage();
+  const { status: updateStatus, updateVersion, progress, checkForUpdate, installUpdate } = useUpdater();
   const openTagEditor = useStore((s) => s.openTagEditor);
   const openConfirmation = useStore((s) => s.openConfirmation);
   const openOnboarding = useStore((s) => s.openOnboarding);
@@ -231,6 +233,45 @@ export function SettingsPage() {
               checked={config.autostart}
               onChange={(autostart) => updateConfig({ autostart })}
             />
+          </div>
+        </Card>
+
+        {/* Updates */}
+        <Card>
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-text-primary">
+                {t("settings.updates")}
+              </h3>
+              <p className="text-xs text-text-secondary">
+                {updateStatus === "checking"
+                  ? t("settings.checking")
+                  : updateStatus === "available"
+                    ? t("settings.updateAvailable", { version: updateVersion })
+                    : updateStatus === "downloading"
+                      ? t("settings.downloading", { progress })
+                      : updateStatus === "upToDate"
+                        ? t("settings.upToDate")
+                        : updateStatus === "error"
+                          ? t("settings.updateError")
+                          : t("settings.updatesDesc")}
+              </p>
+            </div>
+            {updateStatus === "checking" ? (
+              <Loader2 className="h-4 w-4 animate-spin text-text-secondary" />
+            ) : updateStatus === "available" ? (
+              <Button variant="primary" size="sm" onClick={installUpdate}>
+                {t("settings.updateNow")}
+              </Button>
+            ) : updateStatus === "error" ? (
+              <Button variant="secondary" size="sm" onClick={checkForUpdate}>
+                {t("settings.retry")}
+              </Button>
+            ) : updateStatus === "downloading" ? null : (
+              <Button variant="secondary" size="sm" onClick={checkForUpdate}>
+                {t("settings.checkUpdates")}
+              </Button>
+            )}
           </div>
         </Card>
 

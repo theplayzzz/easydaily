@@ -34,7 +34,19 @@
       "Bash(npx --yes @anthropic-ai/tauri-icon:*)",
       "Bash(npx tauri icon --help:*)",
       "Bash(npx @tauri-apps/cli icon --help)",
-      "Bash(npx @tauri-apps/cli icon:*)"
+      "Bash(npx @tauri-apps/cli icon:*)",
+      "Bash(node --version:*)",
+      "Bash(npx tauri:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(git push:*)",
+      "WebSearch",
+      "WebFetch(domain:v2.tauri.app)",
+      "WebFetch(domain:docs.rs)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:thatgurjot.com)",
+      "Bash(gh:*)"
     ]
   }
 }

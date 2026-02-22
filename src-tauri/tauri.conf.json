@@ -32,7 +32,19 @@
       "iconAsTemplate": false
     }
   },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ2NTU0RDIzOUZEOTc5NUMKUldSY2VkbWZJMDFWUml2aS9MZ3UvaFZFQ0JoeWFpYzJrQzZrZitHU21pVmdJc21leUxsbmVOT3AK",
+      "endpoints": [
+        "https://github.com/theplayzzz/easydaily/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  },
   "bundle": {
+    "createUpdaterArtifacts": true,
     "active": true,
     "targets": ["nsis"],
     "windows": {

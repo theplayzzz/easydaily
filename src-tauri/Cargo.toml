@@ -29,3 +29,5 @@ log = "0.4"
 env_logger = "0.11"
 winapi = { version = "0.3", features = ["winuser", "sysinfoapi", "windef", "playsoundapi"] }
 winreg = "0.55"
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"

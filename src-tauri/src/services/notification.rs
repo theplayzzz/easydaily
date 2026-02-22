@@ -1,10 +1,13 @@
 use std::ptr;
 
 use tauri::{AppHandle, Manager, WebviewUrl, WebviewWindowBuilder};
+use winapi::shared::windef::RECT;
 use winapi::um::playsoundapi::PlaySoundW;
+use winapi::um::winuser::{SystemParametersInfoW, SPI_GETWORKAREA};
 
 const NOTIFICATION_WIDTH: f64 = 360.0;
 const NOTIFICATION_HEIGHT: f64 = 140.0;
+const MARGIN: f64 = 16.0;
 const SND_ASYNC: u32 = 0x0001;
 const SND_ALIAS: u32 = 0x0001_0000;
 
@@ -47,15 +50,27 @@ pub fn show_notification(app: &AppHandle, notification_type: &str, play_sound: b
 }
 
 fn get_notification_position(app: &AppHandle) -> (f64, f64) {
-    // Try to get screen dimensions from the primary monitor
-    if let Some(window) = app.get_webview_window("main") {
-        if let Ok(Some(monitor)) = window.primary_monitor() {
-            let size = monitor.size();
-            let scale = monitor.scale_factor();
-            let width = size.width as f64 / scale;
-            let height = size.height as f64 / scale;
-            let x = width - NOTIFICATION_WIDTH - 16.0;
-            let y = height - NOTIFICATION_HEIGHT - 16.0;
+    // Get the Windows work area (screen minus taskbar) for correct positioning.
+    // SPI_GETWORKAREA returns physical pixels; divide by scale for logical pixels.
+    let scale = app
+        .get_webview_window("main")
+        .and_then(|w| w.primary_monitor().ok().flatten())
+        .map(|m| m.scale_factor())
+        .unwrap_or(1.0);
+
+    unsafe {
+        let mut work_area: RECT = std::mem::zeroed();
+        if SystemParametersInfoW(
+            SPI_GETWORKAREA,
+            0,
+            &mut work_area as *mut _ as *mut _,
+            0,
+        ) != 0
+        {
+            let right = work_area.right as f64 / scale;
+            let bottom = work_area.bottom as f64 / scale;
+            let x = right - NOTIFICATION_WIDTH - MARGIN;
+            let y = bottom - NOTIFICATION_HEIGHT - MARGIN;
             return (x, y);
         }
     }
