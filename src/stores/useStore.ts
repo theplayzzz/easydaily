@@ -88,7 +88,7 @@ export const useStore = create<AppState>((set, get) => ({
     onboardingCompleted: false,
     lastSessionDate: "",
     windowPosition: { x: 0, y: 0 },
-    autostart: true,
+    autostart: false,
   },
   tags: [],
   currentPage: Page.QuickActions,

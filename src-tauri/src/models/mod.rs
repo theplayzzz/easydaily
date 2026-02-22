@@ -79,8 +79,8 @@ pub struct Tag {
 
 // --- Configuration ---
 
-fn default_true() -> bool {
-    true
+fn default_false() -> bool {
+    false
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -114,7 +114,7 @@ pub struct Config {
     pub onboarding_completed: bool,
     pub last_session_date: String,
     pub window_position: WindowPosition,
-    #[serde(default = "default_true")]
+    #[serde(default = "default_false")]
     pub autostart: bool,
 }
 
@@ -132,7 +132,7 @@ impl Default for Config {
             onboarding_completed: false,
             last_session_date: String::new(),
             window_position: WindowPosition { x: 0.0, y: 0.0 },
-            autostart: true,
+            autostart: false,
         }
     }
 }

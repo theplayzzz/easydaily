@@ -46,7 +46,7 @@ export const mockConfig: Config = {
   onboardingCompleted: true,
   lastSessionDate: formatDate(today),
   windowPosition: { x: 100, y: 100 },
-  autostart: true,
+  autostart: false,
 };
 
 const todayNotes: Note[] = [
