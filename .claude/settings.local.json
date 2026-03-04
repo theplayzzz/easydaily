@@ -46,7 +46,8 @@
       "WebFetch(domain:docs.rs)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:thatgurjot.com)",
-      "Bash(gh:*)"
+      "Bash(gh:*)",
+      "Bash(git tag:*)"
     ]
   }
 }
