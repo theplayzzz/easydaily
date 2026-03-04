@@ -1,6 +1,6 @@
 [package]
 name = "easydaily"
-version = "1.0.0"
+version = "1.0.3"
 description = "EasyDaily - Document your daily activities"
 authors = ["you"]
 license = ""
