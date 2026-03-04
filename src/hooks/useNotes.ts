@@ -16,8 +16,9 @@ export function useNotes() {
     content: string;
     contentHtml: string;
     tags: string[];
+    date?: string;
   }) => {
-    const date = format(new Date(), "yyyy-MM-dd");
+    const date = data.date || format(new Date(), "yyyy-MM-dd");
     const note = await invoke<Note>("create_note", {
       date,
       content: data.content,

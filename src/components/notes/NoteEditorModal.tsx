@@ -12,7 +12,7 @@ import { cn } from "../../utils/cn";
 
 export function NoteEditorModal() {
   const { t } = useTranslation();
-  const { open, noteId } = useStore((s) => s.modals.noteEditor);
+  const { open, noteId, targetDate } = useStore((s) => s.modals.noteEditor);
   const closeNoteEditor = useStore((s) => s.closeNoteEditor);
   const tags = useStore((s) => s.tags);
   const dayDataCache = useStore((s) => s.dayDataCache);
@@ -79,7 +79,7 @@ export function NoteEditorModal() {
           await editNote(date, noteId, { content, contentHtml, tags: selectedTags });
         }
       } else {
-        await createNote({ content, contentHtml, tags: selectedTags });
+        await createNote({ content, contentHtml, tags: selectedTags, date: targetDate ?? undefined });
       }
       closeNoteEditor();
     } catch (err) {

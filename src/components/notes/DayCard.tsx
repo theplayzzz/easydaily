@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import { type Locale, format, isToday, isYesterday, parseISO } from "date-fns";
 import { ptBR, enUS } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { cn } from "../../utils/cn";
 import { NoteItem } from "./NoteItem";
+import { useStore } from "../../stores/useStore";
 import type { Note } from "../../types";
 
 interface DayCardProps {
@@ -20,6 +21,7 @@ const localeMap: Record<string, { locale: Locale; format: string }> = {
 export function DayCard({ date, notes }: DayCardProps) {
   const [expanded, setExpanded] = useState(false);
   const { t, i18n } = useTranslation();
+  const openNoteEditor = useStore((s) => s.openNoteEditor);
 
   const parsedDate = parseISO(date);
   const { locale, format: dateFormat } = localeMap[i18n.language] ?? localeMap["pt-BR"];
@@ -45,12 +47,24 @@ export function DayCard({ date, notes }: DayCardProps) {
             {t("history.notesCount", { count: notes.length })}
           </span>
         </div>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              openNoteEditor(null, date);
+            }}
+            className="p-1 rounded-md text-text-secondary hover:text-accent-primary hover:bg-accent-primary/10 transition-colors"
+            title={t("history.addNote")}
+          >
+            <Plus className="h-3.5 w-3.5" />
+          </button>
         <ChevronDown
           className={cn(
             "h-4 w-4 text-text-secondary transition-transform duration-200",
             expanded && "rotate-180",
           )}
         />
+        </div>
       </button>
       <div
         className={cn(

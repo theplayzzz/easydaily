@@ -10,7 +10,7 @@ interface NotificationState {
 }
 
 interface ModalsState {
-  noteEditor: { open: boolean; noteId: string | null };
+  noteEditor: { open: boolean; noteId: string | null; targetDate: string | null };
   tagEditor: { open: boolean; tagId: string | null };
   confirmation: {
     open: boolean;
@@ -61,7 +61,7 @@ interface AppState {
   hideNotification: () => void;
 
   // Modals
-  openNoteEditor: (noteId?: string | null) => void;
+  openNoteEditor: (noteId?: string | null, targetDate?: string | null) => void;
   closeNoteEditor: () => void;
   openTagEditor: (tagId?: string | null) => void;
   closeTagEditor: () => void;
@@ -97,7 +97,7 @@ export const useStore = create<AppState>((set, get) => ({
   dayDataCache: {},
   notification: { visible: false, type: null, startedAt: null },
   modals: {
-    noteEditor: { open: false, noteId: null },
+    noteEditor: { open: false, noteId: null, targetDate: null },
     tagEditor: { open: false, tagId: null },
     confirmation: { open: false, title: "", message: "", onConfirm: null },
     aiResult: { open: false, state: "loading", content: "", summaryType: null },
@@ -236,17 +236,17 @@ export const useStore = create<AppState>((set, get) => ({
     });
   },
 
-  openNoteEditor: (noteId = null) => {
-    logger.info("Store", `Note editor opened: ${noteId ?? "new"}`);
+  openNoteEditor: (noteId = null, targetDate = null) => {
+    logger.info("Store", `Note editor opened: ${noteId ?? "new"}, date: ${targetDate ?? "today"}`);
     set((s) => ({
-      modals: { ...s.modals, noteEditor: { open: true, noteId: noteId ?? null } },
+      modals: { ...s.modals, noteEditor: { open: true, noteId: noteId ?? null, targetDate: targetDate ?? null } },
     }));
   },
 
   closeNoteEditor: () => {
     logger.info("Store", "Note editor closed");
     set((s) => ({
-      modals: { ...s.modals, noteEditor: { open: false, noteId: null } },
+      modals: { ...s.modals, noteEditor: { open: false, noteId: null, targetDate: null } },
     }));
   },
 
