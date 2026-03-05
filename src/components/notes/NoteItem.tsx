@@ -1,6 +1,7 @@
 import { format, parseISO } from "date-fns";
 import { Pencil, Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNotes } from "../../hooks/useNotes";
 import { useStore } from "../../stores/useStore";
 import { TagChip } from "../common";
 
@@ -19,7 +20,7 @@ export function NoteItem({ note, date }: NoteItemProps) {
   const tags = useStore((s) => s.tags);
   const openNoteEditor = useStore((s) => s.openNoteEditor);
   const openConfirmation = useStore((s) => s.openConfirmation);
-  const removeNote = useStore((s) => s.removeNote);
+  const { deleteNote } = useNotes();
 
   const time = format(parseISO(note.createdAt), "HH:mm");
   const noteTags = tags.filter((tag) => note.tags.includes(tag.id));
@@ -30,7 +31,7 @@ export function NoteItem({ note, date }: NoteItemProps) {
     openConfirmation(
       t("confirmation.deleteNote"),
       t("confirmation.deleteNoteMsg"),
-      () => removeNote(date, note.id),
+      () => deleteNote(date, note.id),
     );
   };
 

@@ -3,7 +3,8 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import CodeBlock from "@tiptap/extension-code-block";
-import { Bold, Italic, Code, List, Paperclip } from "lucide-react";
+import { format } from "date-fns";
+import { Bold, Italic, Code, List, Paperclip, Calendar } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Modal, Button, TagChip } from "../common";
 import { useStore } from "../../stores/useStore";
@@ -16,8 +17,9 @@ export function NoteEditorModal() {
   const closeNoteEditor = useStore((s) => s.closeNoteEditor);
   const tags = useStore((s) => s.tags);
   const dayDataCache = useStore((s) => s.dayDataCache);
-  const { createNote, editNote } = useNotes();
+  const { createNote, editNote, deleteNote } = useNotes();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
 
   // Find existing note if editing
   const existingNote = noteId
@@ -43,18 +45,27 @@ export function NoteEditorModal() {
     },
   });
 
-  // Set content when editing existing note
+  // Find the date of the existing note
+  const existingNoteDate = existingNote
+    ? Object.entries(dayDataCache).find(([, d]) =>
+        d.notes.some((n) => n.id === noteId),
+      )?.[0]
+    : null;
+
+  // Set content when opening
   useEffect(() => {
     if (open && editor) {
       if (existingNote) {
         editor.commands.setContent(existingNote.contentHtml);
         setSelectedTags(existingNote.tags);
+        setSelectedDate(existingNoteDate || format(new Date(), "yyyy-MM-dd"));
       } else {
         editor.commands.clearContent();
         setSelectedTags([]);
+        setSelectedDate(targetDate || format(new Date(), "yyyy-MM-dd"));
       }
     }
-  }, [open, existingNote, editor]);
+  }, [open, existingNote, existingNoteDate, editor, targetDate]);
 
   const toggleTag = (tagId: string) => {
     setSelectedTags((prev) =>
@@ -71,15 +82,16 @@ export function NoteEditorModal() {
     if (!content.trim()) return;
 
     try {
-      if (existingNote) {
-        const date = Object.entries(dayDataCache).find(([, d]) =>
-          d.notes.some((n) => n.id === noteId),
-        )?.[0];
-        if (date && noteId) {
-          await editNote(date, noteId, { content, contentHtml, tags: selectedTags });
+      if (existingNote && existingNoteDate && noteId) {
+        if (selectedDate !== existingNoteDate) {
+          // Date changed — move note: delete from old date, create in new
+          await deleteNote(existingNoteDate, noteId);
+          await createNote({ content, contentHtml, tags: selectedTags, date: selectedDate });
+        } else {
+          await editNote(existingNoteDate, noteId, { content, contentHtml, tags: selectedTags });
         }
       } else {
-        await createNote({ content, contentHtml, tags: selectedTags, date: targetDate ?? undefined });
+        await createNote({ content, contentHtml, tags: selectedTags, date: selectedDate });
       }
       closeNoteEditor();
     } catch (err) {
@@ -117,6 +129,18 @@ export function NoteEditorModal() {
       title={existingNote ? t("noteEditor.editTitle") : t("noteEditor.title")}
     >
       <div className="flex flex-col">
+        {/* Date picker */}
+        <div className="flex items-center gap-2 px-4 py-2 border-b border-border">
+          <Calendar className="h-3.5 w-3.5 text-text-secondary" />
+          <input
+            type="date"
+            value={selectedDate}
+            max={format(new Date(), "yyyy-MM-dd")}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="bg-transparent text-xs text-text-secondary hover:text-text-primary focus:text-text-primary outline-none cursor-pointer transition-colors [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-50 [&::-webkit-calendar-picker-indicator]:hover:opacity-100"
+          />
+        </div>
+
         {/* Toolbar */}
         <div className="flex items-center gap-1 px-4 py-2 border-b border-border">
           {toolbarButtons.map(({ icon: Icon, action, active }, i) => (
