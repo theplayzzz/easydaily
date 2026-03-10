@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex};
 
 use tauri::State;
 
-use crate::models::{DayData, Note};
+use crate::models::{AiProvider, DayData, Note, Summary, SummaryType};
 use crate::services::storage::StorageService;
 
 #[tauri::command]
@@ -113,4 +113,46 @@ pub fn list_days(
 ) -> Result<Vec<String>, String> {
     let storage = storage.lock().map_err(|e| format!("Lock error: {}", e))?;
     storage.list_days()
+}
+
+#[tauri::command]
+pub fn save_summary(
+    storage: State<'_, Arc<Mutex<StorageService>>>,
+    date: String,
+    summary_type: String,
+    content: String,
+    provider: String,
+) -> Result<Summary, String> {
+    let storage = storage.lock().map_err(|e| format!("Lock error: {}", e))?;
+    let mut day_data = storage.load_day_data(&date)?;
+
+    // Parse summary type
+    let summary_type_enum = match summary_type.as_str() {
+        "daily_summary" => SummaryType::Daily,
+        "combined_summary" => SummaryType::Combined,
+        "standup" => SummaryType::Standup,
+        _ => return Err(format!("Invalid summary type: {}", summary_type)),
+    };
+
+    // Parse provider
+    let provider_enum = match provider.as_str() {
+        "openai" => AiProvider::Openai,
+        "grok" => AiProvider::Grok,
+        _ => return Err(format!("Invalid provider: {}", provider)),
+    };
+
+    let now = chrono::Utc::now().to_rfc3339();
+    let summary = Summary {
+        id: uuid::Uuid::new_v4().to_string(),
+        created_at: now,
+        summary_type: summary_type_enum,
+        content,
+        provider: provider_enum,
+    };
+
+    day_data.summaries.push(summary.clone());
+    storage.save_day_data(&day_data)?;
+
+    log::info!("[Storage] Saved summary {} for date {}", summary.id, date);
+    Ok(summary)
 }

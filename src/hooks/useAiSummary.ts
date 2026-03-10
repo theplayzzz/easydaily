@@ -2,7 +2,7 @@ import { format, subDays } from "date-fns";
 import { invoke } from "@tauri-apps/api/core";
 import { useStore } from "../stores/useStore";
 import { logger } from "../utils/logger";
-import type { Note } from "../types";
+import type { Note, Summary } from "../types";
 
 function mapError(error: string): string {
   if (error.includes("INVALID_API_KEY")) return "INVALID_API_KEY";
@@ -15,8 +15,10 @@ function mapError(error: string): string {
 export function useAiSummary() {
   const dayDataCache = useStore((s) => s.dayDataCache);
   const tags = useStore((s) => s.tags);
+  const config = useStore((s) => s.config);
   const openAiResult = useStore((s) => s.openAiResult);
   const setAiResultState = useStore((s) => s.setAiResultState);
+  const addSummary = useStore((s) => s.addSummary);
 
   const today = format(new Date(), "yyyy-MM-dd");
   const yesterday = format(subDays(new Date(), 1), "yyyy-MM-dd");
@@ -47,6 +49,26 @@ export function useAiSummary() {
     return formatNotesWithTags(notes);
   };
 
+  const saveSummaryToBackend = async (
+    summaryType: "daily_summary" | "combined_summary" | "standup",
+    content: string,
+    date: string
+  ) => {
+    try {
+      const summary = await invoke<Summary>("save_summary", {
+        date,
+        summaryType,
+        content,
+        provider: config.activeProvider,
+      });
+      addSummary(date, summary);
+      logger.info("useAiSummary", `[save_summary] Saved summary ${summary.id} to ${date}`);
+    } catch (err) {
+      logger.error("useAiSummary", `[save_summary] Failed to save summary`, err);
+      // Don't show error to user - summary was still generated successfully
+    }
+  };
+
   const generateDailySummary = async () => {
     const startTime = performance.now();
     logger.info("useAiSummary", "[daily_summary] Started — collecting notes...");
@@ -66,6 +88,8 @@ export function useAiSummary() {
       const totalMs = Math.round(performance.now() - startTime);
       logger.info("useAiSummary", `[daily_summary] Success — invoke: ${invokeMs}ms, total: ${totalMs}ms, result: ${result.length} chars`);
       setAiResultState("success", result);
+      // Save summary to backend
+      await saveSummaryToBackend("daily_summary", result, today);
     } catch (err) {
       const totalMs = Math.round(performance.now() - startTime);
       logger.error("useAiSummary", `[daily_summary] Failed after ${totalMs}ms`, err);
@@ -93,6 +117,8 @@ export function useAiSummary() {
       const totalMs = Math.round(performance.now() - startTime);
       logger.info("useAiSummary", `[combined_summary] Success — invoke: ${invokeMs}ms, total: ${totalMs}ms, result: ${result.length} chars`);
       setAiResultState("success", result);
+      // Save summary to backend (saved on today's date)
+      await saveSummaryToBackend("combined_summary", result, today);
     } catch (err) {
       const totalMs = Math.round(performance.now() - startTime);
       logger.error("useAiSummary", `[combined_summary] Failed after ${totalMs}ms`, err);
@@ -119,6 +145,8 @@ export function useAiSummary() {
       const totalMs = Math.round(performance.now() - startTime);
       logger.info("useAiSummary", `[standup] Success — invoke: ${invokeMs}ms, total: ${totalMs}ms, result: ${result.length} chars`);
       setAiResultState("success", result);
+      // Save summary to backend (saved on today's date)
+      await saveSummaryToBackend("standup", result, today);
     } catch (err) {
       const totalMs = Math.round(performance.now() - startTime);
       logger.error("useAiSummary", `[standup] Failed after ${totalMs}ms`, err);

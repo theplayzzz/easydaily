@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Config, Tag, DayData, Note, NotificationType } from "../types";
+import type { Config, Tag, DayData, Note, NotificationType, Summary } from "../types";
 import { Page } from "../types";
 import { logger } from "../utils/logger";
 
@@ -55,6 +55,7 @@ interface AppState {
   addNote: (date: string, note: Note) => void;
   updateNote: (date: string, noteId: string, updates: Partial<Note>) => void;
   removeNote: (date: string, noteId: string) => void;
+  addSummary: (date: string, summary: Summary) => void;
 
   // Notification
   showNotification: (type: NotificationType) => void;
@@ -217,6 +218,21 @@ export const useStore = create<AppState>((set, get) => ({
             ...dayData,
             notes: dayData.notes.filter((n) => n.id !== noteId),
           },
+        },
+      };
+    });
+  },
+
+  addSummary: (date, summary) => {
+    logger.info("Store", `Summary added to ${date}: ${summary.id}`);
+    set((s) => {
+      const dayData = s.dayDataCache[date] || { date, notes: [], summaries: [] };
+      const updatedDays = s.days.includes(date) ? s.days : [date, ...s.days];
+      return {
+        days: updatedDays,
+        dayDataCache: {
+          ...s.dayDataCache,
+          [date]: { ...dayData, summaries: [summary, ...dayData.summaries] },
         },
       };
     });

@@ -90,6 +90,7 @@ pub fn run() {
             commands::notes::delete_note,
             commands::notes::get_day_data,
             commands::notes::list_days,
+            commands::notes::save_summary,
             // Config
             commands::config::get_config,
             commands::config::update_config,

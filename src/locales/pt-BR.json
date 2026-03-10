@@ -21,8 +21,13 @@
   "history": {
     "title": "Histórico",
     "search": "Buscar notas...",
+    "searchSummaries": "Buscar resumos...",
+    "notesTab": "Notas",
+    "summariesTab": "Resumos IA",
     "empty": "Nenhuma nota encontrada",
     "emptyDesc": "Comece adicionando sua primeira nota!",
+    "noSummaries": "Nenhum resumo gerado",
+    "noSummariesDesc": "Gere resumos na aba Ações",
     "notesCount": "{{count}} nota",
     "notesCount_plural": "{{count}} notas",
     "exportDay": "Exportar Dia",

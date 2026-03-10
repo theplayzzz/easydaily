@@ -21,8 +21,13 @@
   "history": {
     "title": "History",
     "search": "Search notes...",
+    "searchSummaries": "Search summaries...",
+    "notesTab": "Notes",
+    "summariesTab": "AI Summaries",
     "empty": "No notes found",
     "emptyDesc": "Start by adding your first note!",
+    "noSummaries": "No summaries generated",
+    "noSummariesDesc": "Generate summaries in the Actions tab",
     "notesCount": "{{count}} note",
     "notesCount_plural": "{{count}} notes",
     "exportDay": "Export Day",
